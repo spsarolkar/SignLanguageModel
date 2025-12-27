@@ -10,9 +10,22 @@
 		344710862EFFEFEA0000D43C /* SignLanguageModel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignLanguageModel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		344711632F00089D0000D43C /* Exceptions for "SignLanguageModel" folder in "SignLanguageModel" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Info.plist,
+			);
+			target = 344710852EFFEFEA0000D43C /* SignLanguageModel */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		344710882EFFEFEA0000D43C /* SignLanguageModel */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				344711632F00089D0000D43C /* Exceptions for "SignLanguageModel" folder in "SignLanguageModel" target */,
+			);
 			path = SignLanguageModel;
 			sourceTree = "<group>";
 		};

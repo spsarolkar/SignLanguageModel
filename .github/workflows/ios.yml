@@ -8,16 +8,24 @@ on:
 
 jobs:
   build-verification:
-    name: Compile for M1 iPad (Xcode 16)
-    runs-on: macos-15  # <--- CHANGED: Uses macOS Sequoia (Xcode 16 default)
+    name: Compile on macOS 26 (Beta)
+    runs-on: macos-26  # Correct for M1/M2/M3 Beta Runner
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Explicitly select Xcode 16.0 just to be safe
-      - name: Select Xcode 16
-        run: sudo xcode-select -s /Applications/Xcode_16.0.app
+      # 1. Check which Xcode versions are actually installed
+      - name: List Xcode Versions
+        run: ls /Applications/ | grep Xcode
+
+      # 2. Select the latest Xcode 26 (Handles 26.0, 26.1, or 26.2 automatically)
+      - name: Select Latest Xcode 26
+        run: |
+          # Finds the path (e.g., /Applications/Xcode_26.2.app) and selects it
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
+          echo "Selected Xcode: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH"
 
       - name: Resolve Dependencies
         run: xcodebuild -resolvePackageDependencies -scheme SignLanguageModel
