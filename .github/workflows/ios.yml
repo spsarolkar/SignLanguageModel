@@ -1,0 +1,33 @@
+name: Agentic Compilation Check
+
+on:
+  push:
+    branches: [ "main", "fix/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-verification:
+    name: Compile for M1 iPad (Xcode 16)
+    runs-on: macos-15  # <--- CHANGED: Uses macOS Sequoia (Xcode 16 default)
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Explicitly select Xcode 16.0 just to be safe
+      - name: Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.0.app
+
+      - name: Resolve Dependencies
+        run: xcodebuild -resolvePackageDependencies -scheme ISLScientificWorkbench
+
+      - name: Build (No Signing)
+        run: |
+          xcodebuild build \
+            -scheme ISLScientificWorkbench \
+            -destination 'generic/platform=iOS' \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
