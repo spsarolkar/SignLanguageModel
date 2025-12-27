@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct ISLScientificWorkbenchApp: App {
+struct SignLanguageModelApp: App {
     @StateObject private var coordinator = AppCoordinator()
     
     var body: some Scene {
