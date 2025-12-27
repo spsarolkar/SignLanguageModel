@@ -2,31 +2,28 @@ name: Agentic Compilation Check
 
 on:
   push:
-    branches: [ "main", "fix/*" ] # Triggers on main OR agent branches
+    branches: [ "main", "fix/*" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build-verification:
-    name: Compile for M1 iPad
-    runs-on: macos-14  # <--- CRITICAL: Forces M1 Apple Silicon Runner
+    name: Compile for M1 iPad (Xcode 16)
+    runs-on: macos-15  # <--- CHANGED: Uses macOS Sequoia (Xcode 16 default)
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # MLX often needs specific Xcode versions; macOS 14 usually defaults to Xcode 15/16
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      # Explicitly select Xcode 16.0 just to be safe
+      - name: Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
-      # This step fixes the "Missing Package" errors common with Swift PM
       - name: Resolve Dependencies
         run: xcodebuild -resolvePackageDependencies -scheme ISLScientificWorkbench
 
       - name: Build (No Signing)
         run: |
-          # We build for "Generic iOS Device" to ensure ARM64 compatibility
-          # CODE_SIGNING_ALLOWED=NO prevents errors about missing certificates
           xcodebuild build \
             -scheme ISLScientificWorkbench \
             -destination 'generic/platform=iOS' \
