@@ -20,12 +20,12 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_16.0.app
 
       - name: Resolve Dependencies
-        run: xcodebuild -resolvePackageDependencies -scheme ISLScientificWorkbench
+        run: xcodebuild -resolvePackageDependencies -scheme SignLanguageModel
 
       - name: Build (No Signing)
         run: |
           xcodebuild build \
-            -scheme ISLScientificWorkbench \
+            -scheme SignLanguageModel \
             -destination 'generic/platform=iOS' \
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
