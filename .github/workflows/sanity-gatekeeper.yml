@@ -48,15 +48,19 @@ jobs:
           name: swiftlint-results
           path: swiftlint_result.json
 
-      # Step 2: Run xcodebuild test for iPad Pro (11-inch) (Continue on error)
+      # Step 2: Build and Test on iPad Pro (11-inch) (Continue on error)
+      - name: Resolve Dependencies
+        continue-on-error: true
+        run: |
+          xcodebuild -resolvePackageDependencies -scheme SignLanguageModelTests || true
+
       - name: Build and Test on iPad Pro (11-inch)
         continue-on-error: true
         run: |
           set -o pipefail
           xcodebuild test \
-            -project SignLanguageModel.xcodeproj \
-            -scheme SignLanguageModel \
-            -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (4th generation),OS=17.2' \
+            -scheme SignLanguageModelTests \
+            -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (4th generation)' \
             -derivedDataPath DerivedData \
             -enableCodeCoverage YES \
             | tee xcodebuild.log || true

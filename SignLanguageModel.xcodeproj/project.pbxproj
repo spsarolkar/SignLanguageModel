@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		34AC23B52F011A83004606A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3447107E2EFFEFEA0000D43C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 344710852EFFEFEA0000D43C;
+			remoteInfo = SignLanguageModel;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		344710862EFFEFEA0000D43C /* SignLanguageModel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignLanguageModel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34AC23B12F011A83004606A0 /* SignLanguageModelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SignLanguageModelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -29,10 +40,22 @@
 			path = SignLanguageModel;
 			sourceTree = "<group>";
 		};
+		34AC23B22F011A83004606A0 /* SignLanguageModelTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SignLanguageModelTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		344710832EFFEFEA0000D43C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34AC23AE2F011A83004606A0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				344710882EFFEFEA0000D43C /* SignLanguageModel */,
+				34AC23B22F011A83004606A0 /* SignLanguageModelTests */,
 				344710872EFFEFEA0000D43C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				344710862EFFEFEA0000D43C /* SignLanguageModel.app */,
+				34AC23B12F011A83004606A0 /* SignLanguageModelTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +108,29 @@
 			productReference = 344710862EFFEFEA0000D43C /* SignLanguageModel.app */;
 			productType = "com.apple.product-type.application";
 		};
+		34AC23B02F011A83004606A0 /* SignLanguageModelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34AC23B92F011A83004606A0 /* Build configuration list for PBXNativeTarget "SignLanguageModelTests" */;
+			buildPhases = (
+				34AC23AD2F011A83004606A0 /* Sources */,
+				34AC23AE2F011A83004606A0 /* Frameworks */,
+				34AC23AF2F011A83004606A0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				34AC23B62F011A83004606A0 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				34AC23B22F011A83004606A0 /* SignLanguageModelTests */,
+			);
+			name = SignLanguageModelTests;
+			packageProductDependencies = (
+			);
+			productName = SignLanguageModelTests;
+			productReference = 34AC23B12F011A83004606A0 /* SignLanguageModelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -95,6 +143,10 @@
 				TargetAttributes = {
 					344710852EFFEFEA0000D43C = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					34AC23B02F011A83004606A0 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 344710852EFFEFEA0000D43C;
 					};
 				};
 			};
@@ -113,12 +165,20 @@
 			projectRoot = "";
 			targets = (
 				344710852EFFEFEA0000D43C /* SignLanguageModel */,
+				34AC23B02F011A83004606A0 /* SignLanguageModelTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		344710842EFFEFEA0000D43C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34AC23AF2F011A83004606A0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,7 +195,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		34AC23AD2F011A83004606A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		34AC23B62F011A83004606A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 344710852EFFEFEA0000D43C /* SignLanguageModel */;
+			targetProxy = 34AC23B52F011A83004606A0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3447108F2EFFEFEC0000D43C /* Debug */ = {
@@ -323,6 +398,48 @@
 			};
 			name = Release;
 		};
+		34AC23B72F011A83004606A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BUMDMHL9XB;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.spsarolkar.SignLanguageModelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SignLanguageModel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SignLanguageModel";
+			};
+			name = Debug;
+		};
+		34AC23B82F011A83004606A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BUMDMHL9XB;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.spsarolkar.SignLanguageModelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SignLanguageModel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SignLanguageModel";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -340,6 +457,15 @@
 			buildConfigurations = (
 				344710922EFFEFEC0000D43C /* Debug */,
 				344710932EFFEFEC0000D43C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34AC23B92F011A83004606A0 /* Build configuration list for PBXNativeTarget "SignLanguageModelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AC23B72F011A83004606A0 /* Debug */,
+				34AC23B82F011A83004606A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
