@@ -1,14 +1,20 @@
-# Python dependencies for Sanity Inspector Agent
-# Phase 1: Hybrid CI + Google ADK Agent
+# Python dependencies for SignLanguageModel Agents
+# Phase 1: Sanity Inspector Agent (Hybrid CI + Google ADK)
+# Phase 2: Developer Agent (Autonomous Code Generation)
 
 # Google Generative AI SDK (includes Gemini API)
+# Used by both agents for AI capabilities
 google-generativeai>=0.3.0
 
 # HTTP requests for GitHub API
+# Used for fetching issues, creating PRs, posting comments
 requests>=2.31.0
 
-# Optional: Enhanced JSON handling
+# Enhanced JSON handling
 python-dateutil>=2.8.2
 
-# Optional: Better error reporting
+# Better error reporting and colored terminal output
 colorama>=0.4.6
+
+# Git operations (Developer Agent)
+GitPython>=3.1.40

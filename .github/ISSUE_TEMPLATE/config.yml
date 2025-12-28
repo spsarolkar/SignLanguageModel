@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🤖 Developer Agent Documentation
+    url: https://github.com/spsarolkar/SignLanguageModel/blob/main/agents/README.md
+    about: Learn how the Developer Agent works
+  - name: 🚀 Quick Start Guide
+    url: https://github.com/spsarolkar/SignLanguageModel/blob/main/DEVELOPER_AGENT_QUICKSTART.md
+    about: Test the Developer Agent in 5 minutes
