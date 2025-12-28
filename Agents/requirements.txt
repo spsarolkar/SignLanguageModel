@@ -1,10 +1,12 @@
 # Python dependencies for SignLanguageModel Agents
-# Phase 1: Sanity Inspector Agent (Hybrid CI + Google ADK)
-# Phase 2: Developer Agent (Autonomous Code Generation)
+# Phase 1: Sanity Inspector Agent (Hybrid CI + Google Gemini)
+# Phase 2: Developer Agent (Autonomous Code Generation with Anthropic Claude)
 
-# Google Generative AI SDK (includes Gemini API)
-# Used by both agents for AI capabilities
+# Google Generative AI SDK (Gemini API) - Phase 1 only
 google-generativeai>=0.3.0
+
+# Anthropic SDK (Claude API) - Phase 2 only
+anthropic>=0.39.0
 
 # HTTP requests for GitHub API
 # Used for fetching issues, creating PRs, posting comments

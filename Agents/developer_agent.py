@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Developer Agent - Phase 2 Autonomous Code Generation
-Uses Google ADK and GitHub MCP to autonomously implement features from GitHub Issues.
+Uses Anthropic Claude to autonomously implement features from GitHub Issues.
 """
 
 import os
@@ -11,12 +11,11 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 
-# Google ADK imports
+# Anthropic SDK imports
 try:
-    import google.generativeai as genai
-    from google.generativeai.types import HarmCategory, HarmBlockThreshold
+    import anthropic
 except ImportError:
-    print("Error: google-generativeai not installed. Run: pip install google-generativeai")
+    print("Error: anthropic not installed. Run: pip install anthropic")
     sys.exit(1)
 
 # GitHub API
@@ -40,19 +39,19 @@ logger = logging.getLogger(__name__)
 
 class DeveloperAgent:
     """
-    Autonomous Developer Agent powered by Google ADK.
+    Autonomous Developer Agent powered by Anthropic Claude.
     Reads GitHub issues and implements features autonomously.
     """
 
     def __init__(self, issue_number: str):
         self.issue_number = issue_number
-        self.gemini_api_key = os.getenv("GEMINI_API_KEY")
+        self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
         self.github_token = os.getenv("GITHUB_TOKEN")
         self.github_repo = os.getenv("GITHUB_REPOSITORY")  # e.g., "spsarolkar/SignLanguageModel"
         self.github_actor = os.getenv("GITHUB_ACTOR", "developer-agent")
 
-        if not self.gemini_api_key:
-            raise ValueError("GEMINI_API_KEY environment variable is required")
+        if not self.anthropic_api_key:
+            raise ValueError("ANTHROPIC_API_KEY environment variable is required")
         if not self.github_token:
             raise ValueError("GITHUB_TOKEN environment variable is required")
         if not self.github_repo:
@@ -61,21 +60,15 @@ class DeveloperAgent:
         # Parse repo owner and name
         self.repo_owner, self.repo_name = self.github_repo.split("/")
 
-        # Configure Gemini with higher intelligence model
-        genai.configure(api_key=self.gemini_api_key)
-
-        # Load developer persona
-        self.system_prompt = self._load_developer_persona()
+        # Initialize Anthropic client
+        self.client = anthropic.Anthropic(api_key=self.anthropic_api_key)
 
         # Identify latest available model
         self.model_name = self._get_latest_model()
-        logger.info(f"Using model: {self.model_name}")
+        logger.info(f"Using Claude model: {self.model_name}")
 
-        # Initialize model with system instructions
-        self.model = genai.GenerativeModel(
-            self.model_name,
-            system_instruction=self.system_prompt
-        )
+        # Load developer persona
+        self.system_prompt = self._load_developer_persona()
 
         # State
         self.issue_data = None
@@ -85,37 +78,40 @@ class DeveloperAgent:
         self.pr_url = None
 
     def _get_latest_model(self) -> str:
-        """Identify the latest available Gemini model for code generation."""
-        try:
-            models = genai.list_models()
-            # Filter for models that support generateContent
-            available_models = [
-                model.name.split('/')[-1]  # Extract model name from full path
-                for model in models
-                if 'generateContent' in model.supported_generation_methods
-            ]
-            
-            # Prioritize latest pro/advanced models
-            priority_keywords = ['pro-002', 'pro-001', 'pro','2.5','3.0', '2.0', '2', '1.5', '1']
-            for keyword in priority_keywords:
-                matching = [m for m in available_models if keyword in m.lower()]
-                if matching:
-                    selected = sorted(matching, reverse=True)[0]
-                    logger.info(f"Found available models: {available_models}")
-                    logger.info(f"Selected model: {selected}")
-                    return selected
-            
-            # Fallback to first available model
-            if available_models:
-                return available_models[0]
-            
-            # Ultimate fallback
-            logger.warning("No suitable models found, falling back to gemini-1.5-pro-002")
-            return 'gemini-1.5-pro-002'
-            
-        except Exception as e:
-            logger.warning(f"Error listing models: {e}, falling back to gemini-1.5-pro-002")
-            return 'gemini-1.5-pro-002'
+        """Identify the latest available Claude model for code generation."""
+        # Claude models optimized for code generation (in priority order)
+        preferred_models = [
+            "claude-sonnet-4-20250514",      # Latest Sonnet 4
+            "claude-opus-4-20250514",        # Latest Opus 4
+            "claude-sonnet-3-7-20250219",    # Sonnet 3.7
+            "claude-3-7-sonnet-20250219",    # Alternative naming
+            "claude-3-5-sonnet-20241022",    # Sonnet 3.5 (Oct 2024)
+            "claude-3-5-sonnet-20240620",    # Sonnet 3.5 (June 2024)
+            "claude-3-opus-20240229",        # Opus 3
+            "claude-3-sonnet-20240229",      # Sonnet 3
+        ]
+
+        # Try to use the latest available model
+        for model in preferred_models:
+            try:
+                # Test if model is available by making a minimal request
+                response = self.client.messages.create(
+                    model=model,
+                    max_tokens=10,
+                    messages=[{"role": "user", "content": "test"}]
+                )
+                logger.info(f"Selected model: {model}")
+                return model
+            except anthropic.NotFoundError:
+                continue
+            except Exception as e:
+                logger.warning(f"Error testing model {model}: {e}")
+                continue
+
+        # Fallback to a reliable model
+        fallback = "claude-3-5-sonnet-20241022"
+        logger.warning(f"Using fallback model: {fallback}")
+        return fallback
 
     def _load_developer_persona(self) -> str:
         """Load the developer persona system prompt."""
@@ -269,9 +265,33 @@ Code Quality:
             logger.error(f"Error writing file {filepath}: {e}")
             raise
 
+    def call_claude(self, prompt: str, max_tokens: int = 4096) -> str:
+        """Make a call to Claude API."""
+        try:
+            message = self.client.messages.create(
+                model=self.model_name,
+                max_tokens=max_tokens,
+                system=self.system_prompt,
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
+
+            # Extract text from response
+            response_text = ""
+            for block in message.content:
+                if block.type == "text":
+                    response_text += block.text
+
+            return response_text.strip()
+
+        except Exception as e:
+            logger.error(f"Error calling Claude: {e}")
+            raise
+
     def plan_implementation(self, issue_data: Dict, codebase_structure: Dict) -> Dict:
-        """Use Gemini to plan the implementation."""
-        logger.info("Planning implementation with Gemini")
+        """Use Claude to plan the implementation."""
+        logger.info("Planning implementation with Claude")
 
         issue_title = issue_data.get("title", "")
         issue_body = issue_data.get("body", "")
@@ -314,19 +334,10 @@ Code Quality:
 }}"""
 
         try:
-            response = self.model.generate_content(
-                prompt,
-                safety_settings={
-                    HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-                    HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-                    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-                    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-                }
-            )
-
-            result_text = response.text.strip()
+            response = self.call_claude(prompt, max_tokens=4096)
 
             # Extract JSON from markdown code blocks if present
+            result_text = response
             if "```json" in result_text:
                 result_text = result_text.split("```json")[1].split("```")[0].strip()
             elif "```" in result_text:
@@ -342,7 +353,7 @@ Code Quality:
             raise
 
     def generate_code(self, file_spec: Dict, context_files: List[str] = None) -> str:
-        """Use Gemini to generate Swift code for a file."""
+        """Use Claude to generate Swift code for a file."""
         filepath = file_spec.get("path")
         purpose = file_spec.get("purpose", "")
 
@@ -379,17 +390,7 @@ Description: {self.issue_data.get('body', '')}
 **Output only the complete Swift code, no explanations.**"""
 
         try:
-            response = self.model.generate_content(
-                prompt,
-                safety_settings={
-                    HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-                    HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-                    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-                    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-                }
-            )
-
-            code = response.text.strip()
+            code = self.call_claude(prompt, max_tokens=8192)
 
             # Remove markdown code blocks if present
             if "```swift" in code:
@@ -450,7 +451,7 @@ Description: {self.issue_data.get('body', '')}
 
 Closes #{self.issue_number}
 
-🤖 Generated with Developer Agent powered by Google ADK & Gemini 1.5 Pro
+🤖 Generated with Developer Agent powered by Anthropic Claude
 """
 
             subprocess.run(
@@ -521,7 +522,7 @@ xcodebuild test -scheme SignLanguageModelTests \\
 ---
 
 **🤖 Generated by Developer Agent**
-Powered by Google ADK & Gemini 1.5 Pro
+Powered by Anthropic Claude
 """
 
         pr_data = {
@@ -542,7 +543,7 @@ Powered by Google ADK & Gemini 1.5 Pro
             self.comment_on_issue(
                 f"🤖 **Developer Agent has created a Pull Request!**\n\n"
                 f"Implementation PR: {self.pr_url}\n\n"
-                f"The agent has analyzed your issue and generated code automatically. "
+                f"The agent has analyzed your issue and generated code automatically using Anthropic Claude. "
                 f"Please review the changes and provide feedback!"
             )
 
@@ -564,6 +565,7 @@ Powered by Google ADK & Gemini 1.5 Pro
     def run(self):
         """Main execution flow."""
         logger.info(f"🤖 Developer Agent starting for issue #{self.issue_number}")
+        logger.info(f"Using Anthropic Claude model: {self.model_name}")
 
         try:
             # Step 1: Fetch issue
@@ -579,7 +581,7 @@ Powered by Google ADK & Gemini 1.5 Pro
             codebase_structure = self.explore_codebase()
 
             # Step 3: Plan implementation
-            logger.info("Step 3: Planning implementation")
+            logger.info("Step 3: Planning implementation with Claude")
             plan = self.plan_implementation(issue_data, codebase_structure)
 
             self.files_to_create = plan.get("files_to_create", [])
@@ -593,7 +595,7 @@ Powered by Google ADK & Gemini 1.5 Pro
             self.create_branch()
 
             # Step 5: Generate and write code
-            logger.info("Step 5: Generating code")
+            logger.info("Step 5: Generating code with Claude")
 
             for file_spec in self.files_to_create:
                 logger.info(f"Creating: {file_spec.get('path')}")
@@ -624,6 +626,7 @@ Powered by Google ADK & Gemini 1.5 Pro
                 "issue_number": self.issue_number,
                 "branch": self.branch_name,
                 "pr_url": pr_url,
+                "model_used": self.model_name,
                 "files_created": [f.get('path') for f in self.files_to_create],
                 "files_modified": [f.get('path') for f in self.files_to_modify]
             }
