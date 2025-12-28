@@ -3,12 +3,13 @@ import SwiftUI
 import SnapshotTesting
 
 /// SnapshotHelper - Standardized snapshot testing utilities for SignLanguageModel
-/// Configured for iPad Pro (11-inch) as the reference device
+/// Configured for iPad Pro 11-inch (M5) as the reference device
 class SnapshotHelper {
 
     // MARK: - Configuration
 
     /// Reference device configuration for snapshot tests
+    /// iPad Pro 11-inch (M5) - Compatible with Xcode 26.2 and iOS 26.2
     static let referenceConfig = ViewImageConfig.iPadPro11
 
     /// Snapshot directory relative to test bundle
