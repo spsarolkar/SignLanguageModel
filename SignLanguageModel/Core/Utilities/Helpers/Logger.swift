@@ -1,5 +1,6 @@
 import Foundation
 import os.log
+import Combine
 
 final class Logger {
     static let shared = Logger()

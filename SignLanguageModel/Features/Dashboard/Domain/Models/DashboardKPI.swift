@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 struct DashboardKPI: Identifiable {
     let id = UUID()

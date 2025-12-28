@@ -1,4 +1,5 @@
 import CoreGraphics
+import CoreMedia
 
 struct SkeletonKeypoint: Sendable {
     let joints: [JointType: Keypoint]
@@ -18,3 +19,4 @@ enum JointType: String, CaseIterable, Sendable {
     case leftWrist, rightWrist, leftHip, rightHip
     case leftKnee, rightKnee, leftAnkle, rightAnkle
 }
+

@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct DataPipelineView: View {
     @StateObject private var viewModel = DataPipelineViewModel()
