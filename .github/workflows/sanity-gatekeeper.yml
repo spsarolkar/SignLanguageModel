@@ -8,7 +8,7 @@ on:
 
 jobs:
   sanity-check:
-    runs-on: macos-14
+    runs-on: macos-26  # Correct for M1/M2/M3 Beta Runner
 
     # Explicit permissions for GITHUB_TOKEN
     permissions:
@@ -21,8 +21,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      - name: List Xcode Versions
+        run: ls /Applications/ | grep Xcode
+
+      - name: Select Latest Xcode 26
+        run: |
+          # Finds the path (e.g., /Applications/Xcode_26.2.app) and selects it
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
+          echo "Selected Xcode: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH"
 
       # Step 1: Run SwiftLint (Continue on error)
       - name: Install SwiftLint
