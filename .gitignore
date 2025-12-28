@@ -1,2 +1,32 @@
 ._*
 **/.venv/**
+
+# Xcode
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Snapshot Testing
+# Keep .reference.png (baseline snapshots) but ignore test failure artifacts
+**/__Snapshots__/**/*.failure.png
+**/__Snapshots__/**/*.diff.png
+**/snapshot_diffs.txt
+snapshots_artifacts/
+
+# Test Results
+*.xcresult
+
+# Build Logs
+xcodebuild.log
+swiftlint_result.json
+agent_report.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+.venv/
+venv/
+ENV/

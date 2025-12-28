@@ -44,7 +44,7 @@ class SnapshotHelper {
     ) {
         let config = referenceConfig
 
-        assertSnapshot(
+        SnapshotTesting.assertSnapshot(
             matching: view,
             as: .image(
                 precision: precision,
@@ -78,11 +78,11 @@ class SnapshotHelper {
     ) {
         let config = referenceConfig
 
-        assertSnapshot(
+        SnapshotTesting.assertSnapshot(
             matching: viewController,
             as: .image(
-                precision: precision,
-                on: config
+                on: config,
+                precision: precision
             ),
             named: name,
             record: record,
@@ -112,7 +112,7 @@ class SnapshotHelper {
     ) {
         let config = referenceConfig
 
-        assertSnapshot(
+        SnapshotTesting.assertSnapshot(
             matching: view,
             as: .image(
                 perceptualPrecision: perceptualPrecision,
@@ -146,7 +146,7 @@ class SnapshotHelper {
         testName: String = #function,
         line: UInt = #line
     ) {
-        assertSnapshot(
+        SnapshotTesting.assertSnapshot(
             matching: view,
             as: .image(
                 precision: precision,
@@ -182,7 +182,7 @@ class SnapshotHelper {
     ) {
         // Light mode
         let lightConfig = referenceConfig
-        assertSnapshot(
+        SnapshotTesting.assertSnapshot(
             matching: view,
             as: .image(
                 precision: precision,
@@ -197,7 +197,7 @@ class SnapshotHelper {
         )
 
         // Dark mode
-        assertSnapshot(
+        SnapshotTesting.assertSnapshot(
             matching: view,
             as: .image(
                 precision: precision,
@@ -242,7 +242,7 @@ class SnapshotHelper {
             let traits = UITraitCollection(preferredContentSizeCategory: size)
             let sizeName = String(describing: size)
 
-            assertSnapshot(
+            SnapshotTesting.assertSnapshot(
                 matching: view,
                 as: .image(
                     precision: precision,
