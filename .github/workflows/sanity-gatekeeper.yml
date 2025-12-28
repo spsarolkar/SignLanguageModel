@@ -10,6 +10,13 @@ jobs:
   sanity-check:
     runs-on: macos-14
 
+    # Explicit permissions for GITHUB_TOKEN
+    permissions:
+      contents: read        # Read repository contents
+      pull-requests: write  # Post comments on PRs
+      issues: write         # Write to issues (PRs are issues)
+      checks: read          # Read check run status
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
